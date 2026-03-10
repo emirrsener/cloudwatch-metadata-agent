@@ -9,36 +9,27 @@ Bu agent, Linux sunucularınızdaki RAM kullanımını (GB cinsinden) toplar ve 
 
 ## Uzaktan Kurulum (Remote Installation)
 
-Linux makinelerinize bu agent'ı hızlıca kurmak için aşağıdaki komutu kullanabilirsiniz:
+Linux makinelerinize bu agent'ı en hızlı şekilde kurmak için aşağıdaki komutu kullanabilirsiniz:
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/emirrsener/cloudwatch-metadata-agent/main/install.sh | sudo bash
+```
+
+### Paket ile Kurulum (.deb / .rpm)
+
+Eğer paket yönetici üzerinden kurmak isterseniz:
+
+**Ubuntu/Debian (.deb):**
+```bash
+wget https://github.com/emirrsener/cloudwatch-metadata-agent/releases/download/v0.1.0/cloudwatch-agent-0.1.0.deb
+sudo dpkg -i cloudwatch-agent-0.1.0.deb
+```
+
+**CentOS/RHEL (.rpm):**
+```bash
+wget https://github.com/emirrsener/cloudwatch-metadata-agent/releases/download/v0.1.0/cloudwatch-agent-0.1.0-1.noarch.rpm
+sudo rpm -ivh cloudwatch-agent-0.1.0-1.noarch.rpm
 ```
 
 ### Manuel Kurulum
-
-1. Repoyu klonlayın:
-   ```bash
-   git clone https://github.com/emirrsener/cloudwatch-metadata-agent.git
-   cd cloudwatch-metadata-agent
-   ```
-
-2. Kurulum scriptini çalıştırın:
-   ```bash
-   sudo chmod +x install.sh
-   sudo ./install.sh
-   ```
-
----
-
-# English
-
-This agent collects RAM usage (in GB) from your Linux servers and sends it to CloudWatch via a metadata service.
-
-## Installation
-
-To quickly install this agent on your Linux machines, run the following command:
-
-```bash
-curl -sSL https://raw.githubusercontent.com/emirrsener/cloudwatch-metadata-agent/main/install.sh | sudo bash
-```
+...
