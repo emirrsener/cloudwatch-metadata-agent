@@ -1,0 +1,46 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Debian Package
+        run: |
+          mkdir -p pkg/DEBIAN
+          mkdir -p pkg/usr/sbin
+          mkdir -p pkg/lib/systemd/system
+          cp DEBIAN/* pkg/DEBIAN/
+          cp agent/cloudwatch-agent pkg/usr/sbin/
+          cp agent/systemd/cloudwatch-agent.service pkg/lib/systemd/system/
+          cp agent/systemd/cloudwatch-agent.timer pkg/lib/systemd/system/
+          chmod +x pkg/usr/sbin/cloudwatch-agent
+          chmod +x pkg/DEBIAN/postinst pkg/DEBIAN/postrm pkg/DEBIAN/prerm
+          dpkg-deb --build pkg cloudwatch-agent-0.1.0.deb
+
+      - name: Build RPM Package
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rpm
+          mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+          tar -czf ~/rpmbuild/SOURCES/cloudwatch-agent-0.1.0.tar.gz --transform 's,^,cloudwatch-agent-0.1.0/,' DEBIAN agent Makefile cloudwatch-agent.spec README.md install.sh
+          # Remove @BUILDID@ from spec as we are not using the Makefile's complex versioning here
+          sed -i 's/@BUILDID@//g' cloudwatch-agent.spec
+          rpmbuild -bb cloudwatch-agent.spec --define "_topdir $HOME/rpmbuild"
+          cp ~/rpmbuild/RPMS/noarch/*.rpm .
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            cloudwatch-agent-0.1.0.deb
+            *.rpm
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

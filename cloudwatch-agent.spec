@@ -4,11 +4,11 @@
 Name:      %{pkgname}
 
 Version:   0.1.0
-Release:   ROCKIT1%{?buildid}%{?dist}
+Release:   1%{?buildid}%{?dist}
 Summary:   Active CloudWatch agent for sending metric data via metadata API
 
 License:   GPLv3
-URL:       https://github.com/C2Devel/cloudwatch-metadata-agent.git
+URL:       https://github.com/emirrsener/cloudwatch-metadata-agent.git
 Source0:   %{pkgname}-%{version}.tar.gz
 BuildArch: noarch
  
